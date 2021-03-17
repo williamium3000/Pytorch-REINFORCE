@@ -16,29 +16,31 @@ $$\nabla \log(J(\theta)) = \sum_{t \le 0} r(\tau)\nabla_\theta log\pi_\theta (a_
 - agent.py: the REINFORCE agent
 - network.py: the policy network
 - train.py: training entrance
-- train_Pong.py: training entrance to Pong
 ## Training
 To start training, first modify the environment name in train.py then
 
     python train.py
-
-If you want to train on Pong environment
-
-    python train_Pong.py
 
 All the reward with respect to episode is recorded using tensorboard, to check
 
     tensorboard --logdir=runs
     
 ## Experiments and results
-### Environments
-#### CartPole-v0
+### CartPole-v0
 CartPole-v0 involves a pole on a car and an agent is required to hold control of the car(left/right) in order to prevent the pole from falling. Each step, the agent is rewarded 1 if the pole fails to fall, with a maximum steps of 200.
+
 ![](images/CartPole-vo.gif)
-#### MountainCar-v0
-MountainCar-v0 involves a car in a valley and an agent is required to control the car to drive up the mountain on the right. However, the car's engine is not strong enough to scale the mountain in a single pass. Therefore, the agent is required to learn to drive back and forth to build up momentum.
-![](images/MountainCar.png)
-#### Pong-v0
+
+The following is loss with respect to episodes
+
+![](images/reward.svg)
+
+And a demo of the trained agents
+
+![](images/cartpole_result.gif)
+
+
+### Pong-v0
 Pong-v0 is a atari2600 game where an agent is trying to play against computer in the environment. The final reward is the score of agent minus the score of the computer.
 
-### 
+

@@ -24,11 +24,11 @@ class PGnetwork(nn.Module):
     def __init__(self, num_obs, num_act):
         super(PGnetwork, self).__init__()
         self.backbone = nn.Sequential(
-            nn.Linear(num_obs, num_obs, True),
+            nn.Linear(num_obs, 64, True),
             nn.LeakyReLU(),
-            nn.Linear(num_obs, num_obs, True),
-            nn.LeakyReLU(),
-            nn.Linear(num_obs, num_act, True),
+            # nn.Linear(64, 64, True),
+            # nn.LeakyReLU(),
+            nn.Linear(64, num_act, True),
             nn.Softmax(1)
 
         )

@@ -3,10 +3,11 @@ import logging
 import numpy as np
 import sys
 import agent
-
+import gym_maze
 import torch
 import random
 import numpy as np
+from torch.utils.tensorboard import SummaryWriter
 def setup_seed(seed):
      torch.manual_seed(seed)
      torch.cuda.manual_seed_all(seed)
@@ -53,10 +54,12 @@ def evaluate(time, env, agent, render=False):
 def train(env, env_name, agent, episodes):
     for i in range(episodes):
         obs_list, action_list, reward_list = run_episode(env, agent)
+        writer.add_scalar("reward", sum(reward_list), i)
         if i % 10 == 0:
-            print("Episode {}, Reward Sum {}.".format(i, sum(reward_list)))
-            logging.warning("Episode {}, Reward Sum {}.".format(i, sum(reward_list)))
-
+            sum_r = sum(reward_list)
+            print("Episode {}, Reward Sum {}.".format(i, sum_r))
+            logging.warning("Episode {}, Reward Sum {}.".format(i, sum_r))
+            
 
         batch_obs = np.array(obs_list)
         batch_action = np.array(action_list)
@@ -72,9 +75,10 @@ opt = {
 }
 
 if __name__ == "__main__":
-    # env_name = "CartPole-v0"
-    env_name = "MountainCar-v0"
+
+    env_name = "CartPole-v0"
     env = gym.make(env_name)
+    writer = SummaryWriter()
 
 
     logging.basicConfig(filename="{}.log".format(env_name))
@@ -85,5 +89,8 @@ if __name__ == "__main__":
     logging.warning(opt)
     num_act = env.action_space.n
     obs_dim = env.observation_space.shape[0]
+    print("number of actions: {}".format(num_act))
+    print("observation dimension: {}".format(obs_dim))
     agent = agent.PG_agent(obs_dim, num_act, opt["LEARNING_RATE"])
     train(env, env_name, agent, 1000)
+    evaluate(1, env, agent, render=True) 
